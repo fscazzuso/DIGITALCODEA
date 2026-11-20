@@ -6,13 +6,13 @@ function actualizarSaludo() {
     let logout = document.querySelector('.enlace-logout');
 
     if (email !== null && email !== '') {
-        saludo.innerHTML = textoParaHtml('Bienvenido: ' + email);
+        saludo.innerText = 'Bienvenido: ' + email;
         saludo.style.display = 'inline';
         logout.style.display = 'inline';
         login.style.display = 'none';
         registro.style.display = 'none';
     } else {
-        saludo.innerHTML = '';
+        saludo.innerText = '';
         saludo.style.display = 'none';
         logout.style.display = 'none';
         login.style.display = 'inline';
