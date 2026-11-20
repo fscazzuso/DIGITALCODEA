@@ -22,7 +22,5 @@ if (termino === null || termino === '') {
                 estadoResultados.innerHTML = 'No hay resultados para el término: ' + termino;
             }
         })
-        .catch(function () {
-            estadoResultados.innerHTML = 'No se pudo realizar la búsqueda.';
-        });
+        
 }
