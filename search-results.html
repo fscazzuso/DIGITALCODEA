@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Nova Store - Resultados de búsqueda</title>
+</head>
+
+<body>
+    <header>
+        <a href="index.html"><img class="logo" src="img/nova-store-logo.png" alt="Nova Store - Home"></a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a class="enlace-login" href="login.html">Login</a>
+            <a class="enlace-registro" href="register.html">Registro</a>
+            <span class="saludo"></span>
+            <a class="enlace-logout" href="index.html">Logout</a>
+        </nav>
+        <form class="formulario-busqueda" action="search-results.html" method="get">
+            <label for="buscador">Buscar productos:</label>
+            <div class="campo-busqueda">
+                <input type="text" id="buscador" name="q" placeholder="Ej: laptop">
+                <button type="submit">Buscar</button>
+            </div>
+            <span class="error" id="error-busqueda"></span>
+        </form>
+    </header>
+    <div class="contenido">
+        <nav class="categorias">
+            <h2>Categorías</h2>
+            <p class="estado-categorias">Cargando categorías…</p>
+            <ul class="lista-categorias"></ul>
+        </nav>
+        <main id="contenido-principal">
+            <h1 id="titulo-busqueda">Resultados de búsqueda</h1>
+            <p id="estado-productos" class="estado">Cargando resultados…</p>
+            <section class="productos" id="resultados"></section>
+        </main>
+    </div>
+    <footer>
+        <p>Integrantes: Fausto Beloqui, Francesco Scazzuso y Mateo Posse</p>
+    </footer>
+    <script src="js/comun.js"></script>
+    <script src="js/saludo.js"></script>
+    <script src="js/logout.js"></script>
+    <script src="js/search-results.js"></script>
+</body>
+
+</html>

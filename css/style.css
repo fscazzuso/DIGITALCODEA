@@ -1,0 +1,231 @@
+* {
+    box-sizing: border-box;
+}
+
+body,
+button,
+input {
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+}
+
+body {
+    margin: 0;
+    color: #dcecff;
+    background-color: #10253d;
+}
+
+a {
+    color: #9dcaff;
+}
+
+button,
+input,
+.boton-detalle {
+    padding: 10px;
+}
+
+button,
+.boton-detalle {
+    background-color: #9dcaff;
+    color: #08121f;
+    border: none;
+    text-decoration: none;
+}
+
+header,
+footer {
+    padding: 20px;
+    background-color: #08121f;
+}
+
+header,
+header nav,
+.contenido,
+.productos,
+.detalle {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+header {
+    align-items: center;
+}
+
+header nav a,
+.saludo {
+    margin: 10px;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+}
+
+.logo {
+    width: 220px;
+}
+
+.saludo,
+.enlace-logout,
+#detalle-producto,
+#seccion-reviews {
+    display: none;
+}
+
+.formulario-busqueda {
+    width: 345px;
+}
+
+label,
+.error {
+    display: block;
+}
+
+.campo-busqueda {
+    display: flex;
+}
+
+.campo-busqueda input {
+    width: 75%;
+}
+
+.campo-busqueda button {
+    width: 25%;
+}
+
+.error {
+    color: #ffb6b6;
+}
+
+.banner img {
+    width: 100%;
+    display: block;
+}
+
+.contenido {
+    width: 95%;
+    margin: 24px auto;
+}
+
+.categorias {
+    width: 20%;
+}
+
+main {
+    width: 76%;
+}
+
+.categorias ul,
+article,
+.cuenta {
+    padding: 16px;
+    background-color: #152a43;
+    border: 1px solid #6f9bc7;
+}
+
+.categorias ul {
+    list-style: none;
+}
+
+.categorias a {
+    display: block;
+    padding: 6px 0;
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3 {
+    color: white;
+}
+
+.seccion-catalogo,
+#reviews article {
+    margin-bottom: 24px;
+}
+
+.productos article {
+    width: 31%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.productos img {
+    width: 100%;
+    background-color: #f4f8ff;
+}
+
+.precio {
+    font-weight: bold;
+}
+
+.boton-detalle {
+    margin-top: auto;
+    text-align: center;
+}
+
+.principal-cuenta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.cuenta {
+    width: 400px;
+}
+
+.campo-texto,
+.cuenta button {
+    width: 100%;
+}
+
+.campo-terminos {
+    display: flex;
+    align-items: center;
+}
+
+.campo-terminos label {
+    margin-left: 8px;
+}
+
+.detalle {
+    align-items: flex-start;
+}
+
+.imagen-producto {
+    width: 45%;
+    background-color: #f4f8ff;
+}
+
+.datos-producto {
+    width: 50%;
+}
+
+footer {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    header,
+    header nav {
+        justify-content: center;
+    }
+
+    header nav,
+    .formulario-busqueda,
+    .categorias,
+    main,
+    .productos article,
+    .imagen-producto,
+    .datos-producto {
+        width: 100%;
+    }
+
+    .cuenta {
+        width: 95%;
+    }
+}

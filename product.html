@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Nova Store - Detalle del producto</title>
+</head>
+
+<body>
+    <header>
+        <a href="index.html"><img class="logo" src="img/nova-store-logo.png" alt="Nova Store - Home"></a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a class="enlace-login" href="login.html">Login</a>
+            <a class="enlace-registro" href="register.html">Registro</a>
+            <span class="saludo"></span>
+            <a class="enlace-logout" href="index.html">Logout</a>
+        </nav>
+        <form class="formulario-busqueda" action="search-results.html" method="get">
+            <label for="buscador">Buscar productos:</label>
+            <div class="campo-busqueda">
+                <input type="text" id="buscador" name="q" placeholder="Ej: laptop">
+                <button type="submit">Buscar</button>
+            </div>
+            <span class="error" id="error-busqueda"></span>
+        </form>
+    </header>
+    <div class="contenido">
+        <nav class="categorias">
+            <h2>Categorías</h2>
+            <p class="estado-categorias">Cargando categorías…</p>
+            <ul class="lista-categorias"></ul>
+        </nav>
+        <main id="contenido-principal">
+            <p id="estado-producto" class="estado">Cargando producto…</p>
+            <section id="detalle-producto">
+                <h1 id="nombre-producto"></h1>
+                <div class="detalle">
+                    <img class="imagen-producto" id="foto-producto" alt="Imagen del producto">
+                    <div class="datos-producto">
+                        <p><strong>Marca:</strong> <span id="marca-producto"></span></p>
+                        <p id="descripcion-producto"></p>
+                        <p class="precio" id="precio-producto"></p>
+                        <p><strong>Categoría:</strong> <span id="categoria-producto"></span></p>
+                        <p><strong>Stock:</strong> <span id="stock-producto"></span></p>
+                        <p><strong>Tags:</strong></p>
+                        <ul class="tags" id="tags-producto"></ul>
+                    </div>
+                </div>
+            </section>
+            <section id="seccion-reviews">
+                <h2 id="titulo-reviews">Reviews de usuarios</h2>
+                <p id="estado-reviews" class="estado"></p>
+                <div id="reviews"></div>
+            </section>
+        </main>
+    </div>
+    <footer>
+        <p>Integrantes: Fausto Beloqui, Francesco Scazzuso y Mateo Posse</p>
+    </footer>
+    <script src="js/comun.js"></script>
+    <script src="js/saludo.js"></script>
+    <script src="js/logout.js"></script>
+    <script src="js/product.js"></script>
+</body>
+
+</html>
