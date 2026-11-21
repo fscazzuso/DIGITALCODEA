@@ -4,19 +4,14 @@ let errorBusqueda = document.querySelector('#error-busqueda');
 
 formularioBusqueda.addEventListener('submit', function (event) {
     event.preventDefault();
-    errorBusqueda.innerText = '';
 
     if (campoBusqueda.value === '') {
-        errorBusqueda.innerText = 'Ingresá un término de búsqueda.';
+        errorBusqueda.innerText = 'El campo de búsqueda no puede estar vacío';
     } else if (campoBusqueda.value.length < 3) {
-        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres.';
+        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres';
     } else {
         this.submit();
     }
-});
-
-campoBusqueda.addEventListener('input', function () {
-    errorBusqueda.innerText = '';
 });
 
 let listaCategorias = document.querySelector('.lista-categorias');
@@ -26,86 +21,66 @@ fetch('https://dummyjson.com/products/categories')
     .then(function (response) {
         return response.json();
     })
-    .then(function (categorias) {
-        let enlaces = '';
-        for (let i = 0; i < categorias.length; i++) {
-            enlaces += `<li><a href="category.html?categoria=${categorias[i].slug}"></a></li>`;
+    .then(function (data) {
+        let categorias = '';
+        for (let i = 0; i < data.length; i++) {
+            categorias += `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
         }
-        listaCategorias.innerHTML = enlaces;
-        let textos = document.querySelectorAll('.lista-categorias a');
-        for (let i = 0; i < categorias.length; i++) {
-            textos[i].innerText = categorias[i].name;
-        }
+        listaCategorias.innerHTML = categorias;
         estadoCategorias.innerText = '';
     })
-    .catch(function () {
-        estadoCategorias.innerText = 'No se pudieron cargar las categorías. Volvé a intentar.';
+    .catch(function (error) {
+        console.log('Error: ' + error);
     });
+
+let seccionSmartphones = document.querySelector('#productos-smartphones');
+let estadoSmartphones = document.querySelector('#estado-smartphones');
 
 fetch('https://dummyjson.com/products/category/smartphones?limit=10')
     .then(function (response) {
         return response.json();
     })
     .then(function (data) {
-        let tarjetas = '';
+        let productos = '';
         for (let i = 0; i < data.products.length; i++) {
-            tarjetas += `
+            productos += `
                 <article>
-                    <img alt="Imagen del producto">
-                    <h3></h3>
-                    <p class="descripcion"></p>
-                    <p class="precio"></p>
-                    <a class="boton-detalle" href="product.html?id=${Number(data.products[i].id)}">Ver detalle</a>
+                    <img src="${data.products[i].thumbnail}" alt="${data.products[i].title}">
+                    <h3>${data.products[i].title}</h3>
+                    <p class="descripcion">${data.products[i].description}</p>
+                    <p class="precio">USD ${data.products[i].price}</p>
+                    <a class="boton-detalle" href="product.html?id=${data.products[i].id}">Ver detalle</a>
                 </article>`;
         }
-        document.querySelector('#productos-destacados').innerHTML = tarjetas;
-
-        let imagenes = document.querySelectorAll('#productos-destacados img');
-        let titulos = document.querySelectorAll('#productos-destacados h3');
-        let descripciones = document.querySelectorAll('#productos-destacados .descripcion');
-        let precios = document.querySelectorAll('#productos-destacados .precio');
-        for (let i = 0; i < data.products.length; i++) {
-            imagenes[i].src = data.products[i].thumbnail;
-            titulos[i].innerText = data.products[i].title;
-            descripciones[i].innerText = data.products[i].description;
-            precios[i].innerText = 'USD ' + data.products[i].price;
-        }
-        document.querySelector('#estado-destacados').innerText = '';
+        seccionSmartphones.innerHTML = productos;
+        estadoSmartphones.innerText = '';
     })
-    .catch(function () {
-        document.querySelector('#estado-destacados').innerText = 'No se pudieron cargar los productos.';
+    .catch(function (error) {
+        console.log('Error: ' + error);
     });
+
+let seccionAccesorios = document.querySelector('#productos-accesorios');
+let estadoAccesorios = document.querySelector('#estado-accesorios');
 
 fetch('https://dummyjson.com/products/category/mobile-accessories?limit=10')
     .then(function (response) {
         return response.json();
     })
     .then(function (data) {
-        let tarjetas = '';
+        let productos = '';
         for (let i = 0; i < data.products.length; i++) {
-            tarjetas += `
+            productos += `
                 <article>
-                    <img alt="Imagen del producto">
-                    <h3></h3>
-                    <p class="descripcion"></p>
-                    <p class="precio"></p>
-                    <a class="boton-detalle" href="product.html?id=${Number(data.products[i].id)}">Ver detalle</a>
+                    <img src="${data.products[i].thumbnail}" alt="${data.products[i].title}">
+                    <h3>${data.products[i].title}</h3>
+                    <p class="descripcion">${data.products[i].description}</p>
+                    <p class="precio">USD ${data.products[i].price}</p>
+                    <a class="boton-detalle" href="product.html?id=${data.products[i].id}">Ver detalle</a>
                 </article>`;
         }
-        document.querySelector('#productos-nuevos').innerHTML = tarjetas;
-
-        let imagenes = document.querySelectorAll('#productos-nuevos img');
-        let titulos = document.querySelectorAll('#productos-nuevos h3');
-        let descripciones = document.querySelectorAll('#productos-nuevos .descripcion');
-        let precios = document.querySelectorAll('#productos-nuevos .precio');
-        for (let i = 0; i < data.products.length; i++) {
-            imagenes[i].src = data.products[i].thumbnail;
-            titulos[i].innerText = data.products[i].title;
-            descripciones[i].innerText = data.products[i].description;
-            precios[i].innerText = 'USD ' + data.products[i].price;
-        }
-        document.querySelector('#estado-nuevos').innerText = '';
+        seccionAccesorios.innerHTML = productos;
+        estadoAccesorios.innerText = '';
     })
-    .catch(function () {
-        document.querySelector('#estado-nuevos').innerText = 'No se pudieron cargar los productos.';
+    .catch(function (error) {
+        console.log('Error: ' + error);
     });
