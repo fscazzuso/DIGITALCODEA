@@ -4,19 +4,14 @@ let errorBusqueda = document.querySelector('#error-busqueda');
 
 formularioBusqueda.addEventListener('submit', function (event) {
     event.preventDefault();
-    errorBusqueda.innerText = '';
 
     if (campoBusqueda.value === '') {
-        errorBusqueda.innerText = 'Ingresá un término de búsqueda.';
+        errorBusqueda.innerText = 'El campo de búsqueda no puede estar vacío';
     } else if (campoBusqueda.value.length < 3) {
-        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres.';
+        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres';
     } else {
         this.submit();
     }
-});
-
-campoBusqueda.addEventListener('input', function () {
-    errorBusqueda.innerText = '';
 });
 
 let listaCategorias = document.querySelector('.lista-categorias');
@@ -26,43 +21,38 @@ fetch('https://dummyjson.com/products/categories')
     .then(function (response) {
         return response.json();
     })
-    .then(function (categorias) {
-        let enlaces = '';
-        for (let i = 0; i < categorias.length; i++) {
-            enlaces += `<li><a href="category.html?categoria=${categorias[i].slug}"></a></li>`;
+    .then(function (data) {
+        let categorias = '';
+        for (let i = 0; i < data.length; i++) {
+            categorias += `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
         }
-        listaCategorias.innerHTML = enlaces;
-        let textos = document.querySelectorAll('.lista-categorias a');
-        for (let i = 0; i < categorias.length; i++) {
-            textos[i].innerText = categorias[i].name;
-        }
+        listaCategorias.innerHTML = categorias;
         estadoCategorias.innerText = '';
     })
-    .catch(function () {
-        estadoCategorias.innerText = 'No se pudieron cargar las categorías. Volvé a intentar.';
+    .catch(function (error) {
+        console.log('Error: ' + error);
     });
 
-document.querySelector('#formulario-login').addEventListener('submit', function (event) {
+let formularioLogin = document.querySelector('#formulario-login');
+let campoEmail = document.querySelector('#email');
+let campoContrasena = document.querySelector('#contrasena');
+let errorEmail = document.querySelector('#error-email');
+let errorContrasena = document.querySelector('#error-contrasena');
+
+formularioLogin.addEventListener('submit', function (event) {
     event.preventDefault();
-    let email = document.querySelector('#email').value;
-    let contrasena = document.querySelector('#contrasena').value;
-    let errorEmail = '';
-    let errorContrasena = '';
 
-    if (email === '') {
-        errorEmail = 'El email es obligatorio.';
-    }
-    if (contrasena === '') {
-        errorContrasena = 'La contraseña es obligatoria.';
-    } else if (contrasena.length < 6) {
-        errorContrasena = 'La contraseña debe tener al menos 6 caracteres';
-    }
+    errorEmail.innerText = '';
+    errorContrasena.innerText = '';
 
-    document.querySelector('#error-email').innerText = errorEmail;
-    document.querySelector('#error-contrasena').innerText = errorContrasena;
-
-    if (errorEmail === '' && errorContrasena === '') {
-        localStorage.setItem('emailUsuario', email);
+    if (campoEmail.value === '') {
+        errorEmail.innerText = 'El email es obligatorio';
+    } else if (campoContrasena.value === '') {
+        errorContrasena.innerText = 'La contraseña es obligatoria';
+    } else if (campoContrasena.value.length < 6) {
+        errorContrasena.innerText = 'La contraseña debe tener al menos 6 caracteres';
+    } else {
+        localStorage.setItem('emailUsuario', campoEmail.value);
         this.submit();
     }
 });
