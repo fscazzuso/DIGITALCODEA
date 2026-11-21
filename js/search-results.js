@@ -4,19 +4,14 @@ let errorBusqueda = document.querySelector('#error-busqueda');
 
 formularioBusqueda.addEventListener('submit', function (event) {
     event.preventDefault();
-    errorBusqueda.innerText = '';
 
     if (campoBusqueda.value === '') {
-        errorBusqueda.innerText = 'Ingresá un término de búsqueda.';
+        errorBusqueda.innerText = 'El campo de búsqueda no puede estar vacío';
     } else if (campoBusqueda.value.length < 3) {
-        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres.';
+        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres';
     } else {
         this.submit();
     }
-});
-
-campoBusqueda.addEventListener('input', function () {
-    errorBusqueda.innerText = '';
 });
 
 let listaCategorias = document.querySelector('.lista-categorias');
@@ -26,69 +21,51 @@ fetch('https://dummyjson.com/products/categories')
     .then(function (response) {
         return response.json();
     })
-    .then(function (categorias) {
-        let enlaces = '';
-        for (let i = 0; i < categorias.length; i++) {
-            enlaces += `<li><a href="category.html?categoria=${categorias[i].slug}"></a></li>`;
+    .then(function (data) {
+        let categorias = '';
+        for (let i = 0; i < data.length; i++) {
+            categorias += `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
         }
-        listaCategorias.innerHTML = enlaces;
-        let textos = document.querySelectorAll('.lista-categorias a');
-        for (let i = 0; i < categorias.length; i++) {
-            textos[i].innerText = categorias[i].name;
-        }
+        listaCategorias.innerHTML = categorias;
         estadoCategorias.innerText = '';
     })
-    .catch(function () {
-        estadoCategorias.innerText = 'No se pudieron cargar las categorías. Volvé a intentar.';
+    .catch(function (error) {
+        console.log('Error: ' + error);
     });
 
 let queryString = location.search;
-let parametros = new URLSearchParams(queryString);
-let termino = parametros.get('q');
+let queryStringObj = new URLSearchParams(queryString);
+let termino = queryStringObj.get('q');
+
+let tituloBusqueda = document.querySelector('#titulo-busqueda');
 let estadoResultados = document.querySelector('#estado-productos');
+let seccionResultados = document.querySelector('#resultados');
 
-if (termino === null || termino === '') {
-    estadoResultados.innerHTML = 'Ingresá un término en el buscador.';
-} else if (termino.length < 3) {
-    estadoResultados.innerHTML = 'Ingresá al menos 3 caracteres.';
-} else {
-    document.querySelector('#titulo-busqueda').innerHTML = 'Resultados de búsqueda para: ' + termino;
+tituloBusqueda.innerText = 'Resultados de búsqueda para: ' + termino;
 
-    fetch('https://dummyjson.com/products/search' + queryString + '&limit=0')
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            let tarjetas = '';
+fetch('https://dummyjson.com/products/search?q=' + termino)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        if (data.products.length === 0) {
+            estadoResultados.innerText = 'No hay resultados para el término: ' + termino;
+        } else {
+            let productos = '';
             for (let i = 0; i < data.products.length; i++) {
-                tarjetas += `
+                productos += `
                     <article>
-                        <img alt="Imagen del producto">
-                        <h3></h3>
-                        <p class="descripcion"></p>
-                        <p class="precio"></p>
-                        <a class="boton-detalle" href="product.html?id=${Number(data.products[i].id)}">Ver detalle</a>
+                        <img src="${data.products[i].thumbnail}" alt="${data.products[i].title}">
+                        <h3>${data.products[i].title}</h3>
+                        <p class="descripcion">${data.products[i].description}</p>
+                        <p class="precio">USD ${data.products[i].price}</p>
+                        <a class="boton-detalle" href="product.html?id=${data.products[i].id}">Ver detalle</a>
                     </article>`;
             }
-            document.querySelector('#resultados').innerHTML = tarjetas;
-
-            let imagenes = document.querySelectorAll('#resultados img');
-            let titulos = document.querySelectorAll('#resultados h3');
-            let descripciones = document.querySelectorAll('#resultados .descripcion');
-            let precios = document.querySelectorAll('#resultados .precio');
-            for (let i = 0; i < data.products.length; i++) {
-                imagenes[i].src = data.products[i].thumbnail;
-                titulos[i].innerText = data.products[i].title;
-                descripciones[i].innerText = data.products[i].description;
-                precios[i].innerText = 'USD ' + data.products[i].price;
-            }
-            estadoResultados.innerHTML = '';
-
-            if (data.products.length === 0) {
-                estadoResultados.innerHTML = 'No hay resultados para el término: ' + termino;
-            }
-        })
-        .catch(function () {
-            estadoResultados.innerHTML = 'No se pudo realizar la búsqueda.';
-        });
-}
+            seccionResultados.innerHTML = productos;
+            estadoResultados.innerText = '';
+        }
+    })
+    .catch(function (error) {
+        console.log('Error: ' + error);
+    });
