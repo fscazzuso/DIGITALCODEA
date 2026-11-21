@@ -4,19 +4,14 @@ let errorBusqueda = document.querySelector('#error-busqueda');
 
 formularioBusqueda.addEventListener('submit', function (event) {
     event.preventDefault();
-    errorBusqueda.innerText = '';
 
     if (campoBusqueda.value === '') {
-        errorBusqueda.innerText = 'Ingresá un término de búsqueda.';
+        errorBusqueda.innerText = 'El campo de búsqueda no puede estar vacío';
     } else if (campoBusqueda.value.length < 3) {
-        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres.';
+        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres';
     } else {
         this.submit();
     }
-});
-
-campoBusqueda.addEventListener('input', function () {
-    errorBusqueda.innerText = '';
 });
 
 let listaCategorias = document.querySelector('.lista-categorias');
@@ -26,106 +21,76 @@ fetch('https://dummyjson.com/products/categories')
     .then(function (response) {
         return response.json();
     })
-    .then(function (categorias) {
-        let enlaces = '';
-        for (let i = 0; i < categorias.length; i++) {
-            enlaces += `<li><a href="category.html?categoria=${categorias[i].slug}"></a></li>`;
+    .then(function (data) {
+        let categorias = '';
+        for (let i = 0; i < data.length; i++) {
+            categorias += `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
         }
-        listaCategorias.innerHTML = enlaces;
-        let textos = document.querySelectorAll('.lista-categorias a');
-        for (let i = 0; i < categorias.length; i++) {
-            textos[i].innerText = categorias[i].name;
-        }
+        listaCategorias.innerHTML = categorias;
         estadoCategorias.innerText = '';
     })
-    .catch(function () {
-        estadoCategorias.innerText = 'No se pudieron cargar las categorías. Volvé a intentar.';
+    .catch(function (error) {
+        console.log('Error: ' + error);
     });
 
 let queryString = location.search;
-let parametros = new URLSearchParams(queryString);
-let idProducto = parametros.get('id');
+let queryStringObj = new URLSearchParams(queryString);
+let idProducto = queryStringObj.get('id');
+
 let estadoProducto = document.querySelector('#estado-producto');
+let nombreProducto = document.querySelector('#nombre-producto');
+let fotoProducto = document.querySelector('#foto-producto');
+let marcaProducto = document.querySelector('#marca-producto');
+let descripcionProducto = document.querySelector('#descripcion-producto');
+let precioProducto = document.querySelector('#precio-producto');
+let categoriaProducto = document.querySelector('#categoria-producto');
+let stockProducto = document.querySelector('#stock-producto');
+let tagsProducto = document.querySelector('#tags-producto');
+let reviewsProducto = document.querySelector('#reviews');
 
-if (Number(idProducto) > 0) {
-    fetch('https://dummyjson.com/products/' + idProducto)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (producto) {
-            if (producto.id === undefined) {
-                estadoProducto.innerHTML = 'No se encontró el producto.';
-                return;
+fetch('https://dummyjson.com/products/' + idProducto)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        nombreProducto.innerText = data.title;
+        fotoProducto.src = data.thumbnail;
+        fotoProducto.alt = data.title;
+        descripcionProducto.innerText = data.description;
+        precioProducto.innerText = 'USD ' + data.price;
+        stockProducto.innerText = data.stock + ' unidades';
+        categoriaProducto.innerHTML = `<a href="category.html?categoria=${data.category}">${data.category}</a>`;
+
+        if (data.brand === undefined) {
+            marcaProducto.innerText = 'Sin marca';
+        } else {
+            marcaProducto.innerText = data.brand;
+        }
+
+        let tags = '';
+        for (let i = 0; i < data.tags.length; i++) {
+            if (i < 3) {
+                tags += `<li>${data.tags[i]}</li>`;
             }
+        }
+        tagsProducto.innerHTML = tags;
 
-            document.querySelector('#nombre-producto').innerHTML = producto.title;
-            document.querySelector('#descripcion-producto').innerHTML = producto.description;
-            document.querySelector('#precio-producto').innerHTML = 'USD ' + producto.price;
-            document.querySelector('#foto-producto').src = producto.thumbnail;
-            document.querySelector('#stock-producto').innerHTML = producto.stock + ' unidades';
+        let reviews = '';
+        for (let i = 0; i < data.reviews.length; i++) {
+            reviews += `
+                <article>
+                    <h3>Rating: ${data.reviews[i].rating} / 5</h3>
+                    <p>${data.reviews[i].comment}</p>
+                    <p>Fecha: ${data.reviews[i].date}</p>
+                    <p>Usuario: ${data.reviews[i].reviewerName}</p>
+                </article>`;
+        }
+        reviewsProducto.innerHTML = reviews;
 
-            let marca = 'Sin marca informada';
-            if (producto.brand !== undefined && producto.brand !== null) {
-                marca = producto.brand;
-            }
-            document.querySelector('#marca-producto').innerHTML = marca;
-
-            document.querySelector('#categoria-producto').innerHTML = `<a href="category.html?categoria=${producto.category}"></a>`;
-            document.querySelector('#categoria-producto a').innerHTML = producto.category;
-
-            let etiquetas = [];
-            if (producto.tags !== undefined && producto.tags !== null) {
-                etiquetas = producto.tags;
-            }
-
-            let tags = document.querySelector('#tags-producto');
-            tags.innerHTML = '';
-
-            for (let i = 0; i < etiquetas.length && i < 3; i++) {
-                tags.innerHTML += '<li></li>';
-                let textosTags = document.querySelectorAll('#tags-producto li');
-                textosTags[i].innerHTML = etiquetas[i];
-            }
-
-            let comentarios = [];
-            if (producto.reviews !== undefined && producto.reviews !== null) {
-                comentarios = producto.reviews;
-            }
-
-            let reviews = document.querySelector('#reviews');
-            reviews.innerHTML = '';
-
-            for (let i = 0; i < comentarios.length; i++) {
-                reviews.innerHTML += `
-                    <article>
-                        <h3 class="rating"></h3>
-                        <p class="comentario"></p>
-                        <p class="fecha"></p>
-                        <p class="usuario"></p>
-                    </article>`;
-
-                let ratings = document.querySelectorAll('#reviews .rating');
-                let textos = document.querySelectorAll('#reviews .comentario');
-                let fechas = document.querySelectorAll('#reviews .fecha');
-                let usuarios = document.querySelectorAll('#reviews .usuario');
-
-                ratings[i].innerHTML = 'Rating: ' + comentarios[i].rating + ' / 5';
-                textos[i].innerHTML = comentarios[i].comment;
-                fechas[i].innerHTML = 'Fecha: ' + comentarios[i].date;
-                usuarios[i].innerHTML = 'Usuario: ' + comentarios[i].reviewerName;
-            }
-
-            if (comentarios.length === 0) {
-                document.querySelector('#estado-reviews').innerHTML = 'Este producto todavía no tiene reviews.';
-            }
-
-            estadoProducto.innerHTML = '';
-            document.querySelector('#detalle-producto').style.display = 'block';
-            document.querySelector('#seccion-reviews').style.display = 'block';
-        })
-        .catch(function () {
-            estadoProducto.innerHTML = 'No se pudo cargar el producto.';
-        });
-} else {
-    estadoProducto.innerHTML = 'Elegí un producto desde el catálogo.';
-}
+        estadoProducto.innerText = '';
+        document.querySelector('#detalle-producto').style.display = 'block';
+        document.querySelector('#seccion-reviews').style.display = 'block';
+    })
+    .catch(function (error) {
+        console.log('Error: ' + error);
+    });
