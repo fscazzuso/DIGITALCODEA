@@ -24,7 +24,7 @@ fetch('https://dummyjson.com/products/categories')
     .then(function (data) {
         let categorias = '';
         for (let i = 0; i < data.length; i++) {
-            categorias += `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
+            categorias = categorias + `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
         }
         listaCategorias.innerHTML = categorias;
         estadoCategorias.innerText = '';
@@ -53,7 +53,7 @@ fetch('https://dummyjson.com/products/search?q=' + termino)
         } else {
             let productos = '';
             for (let i = 0; i < data.products.length; i++) {
-                productos += `
+                productos = productos + `
                     <article>
                         <img src="${data.products[i].thumbnail}" alt="${data.products[i].title}">
                         <h3>${data.products[i].title}</h3>

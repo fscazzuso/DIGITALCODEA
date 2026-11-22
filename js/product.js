@@ -24,7 +24,7 @@ fetch('https://dummyjson.com/products/categories')
     .then(function (data) {
         let categorias = '';
         for (let i = 0; i < data.length; i++) {
-            categorias += `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
+            categorias = categorias + `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
         }
         listaCategorias.innerHTML = categorias;
         estadoCategorias.innerText = '';
@@ -70,14 +70,14 @@ fetch('https://dummyjson.com/products/' + idProducto)
         let tags = '';
         for (let i = 0; i < data.tags.length; i++) {
             if (i < 3) {
-                tags += `<li>${data.tags[i]}</li>`;
+                tags = tags + `<li>${data.tags[i]}</li>`;
             }
         }
         tagsProducto.innerHTML = tags;
 
         let reviews = '';
         for (let i = 0; i < data.reviews.length; i++) {
-            reviews += `
+            reviews = reviews + `
                 <article>
                     <h3>Rating: ${data.reviews[i].rating} / 5</h3>
                     <p>${data.reviews[i].comment}</p>
