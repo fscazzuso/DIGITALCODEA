@@ -1,41 +1,5 @@
-let formularioBusqueda = document.querySelector('.formulario-busqueda');
-let campoBusqueda = document.querySelector('#buscador');
-let errorBusqueda = document.querySelector('#error-busqueda');
-
-formularioBusqueda.addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    if (campoBusqueda.value === '') {
-        errorBusqueda.innerText = 'El campo de búsqueda no puede estar vacío';
-    } else if (campoBusqueda.value.length < 3) {
-        errorBusqueda.innerText = 'La búsqueda debe tener al menos 3 caracteres';
-    } else {
-        this.submit();
-    }
-});
-
-let listaCategorias = document.querySelector('.lista-categorias');
-let estadoCategorias = document.querySelector('.estado-categorias');
-
-fetch('https://dummyjson.com/products/categories')
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (data) {
-        let categorias = '';
-        for (let i = 0; i < data.length; i++) {
-            categorias = categorias + `<li><a href="category.html?categoria=${data[i].slug}">${data[i].name}</a></li>`;
-        }
-        listaCategorias.innerHTML = categorias;
-        estadoCategorias.innerText = '';
-    })
-    .catch(function (error) {
-        console.log('Error: ' + error);
-    });
-
-let queryString = location.search;
-let queryStringObj = new URLSearchParams(queryString);
-let idProducto = queryStringObj.get('id');
+let queryStringProducto = new URLSearchParams(location.search);
+let idProducto = queryStringProducto.get('id');
 
 let estadoProducto = document.querySelector('#estado-producto');
 let nombreProducto = document.querySelector('#nombre-producto');
@@ -59,7 +23,8 @@ fetch('https://dummyjson.com/products/' + idProducto)
         descripcionProducto.innerText = data.description;
         precioProducto.innerText = 'USD ' + data.price;
         stockProducto.innerText = data.stock + ' unidades';
-        categoriaProducto.innerHTML = `<a href="category.html?categoria=${data.category}">${data.category}</a>`;
+        categoriaProducto.innerText = data.category;
+        categoriaProducto.href = 'category.html?categoria=' + data.category;
 
         if (data.brand === undefined) {
             marcaProducto.innerText = 'Sin marca';
@@ -81,7 +46,7 @@ fetch('https://dummyjson.com/products/' + idProducto)
                 <article>
                     <h3>Rating: ${data.reviews[i].rating} / 5</h3>
                     <p>${data.reviews[i].comment}</p>
-                    <p>Fecha: ${data.reviews[i].date}</p>
+                    <p>Fecha: ${data.reviews[i].date.slice(0, 10)}</p>
                     <p>Usuario: ${data.reviews[i].reviewerName}</p>
                 </article>`;
         }
